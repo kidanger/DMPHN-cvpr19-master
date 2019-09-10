@@ -47,7 +47,7 @@ def weight_init(m):
         m.weight.data.normal_(0, 0.01)
         m.bias.data = torch.ones(m.bias.data.size())
 
-def deblur(input, output, normalization=1, GPU=0):
+def deblur(input, output, normalization=1, GPU=0, load=f'{ROOT}/checkpoints/{METHOD}'):
     assert(type(input) == type(output))
     if type(input) not in (tuple, list):
         input = (input,)
@@ -61,13 +61,13 @@ def deblur(input, output, normalization=1, GPU=0):
     decoder_lv2 = models.Decoder().apply(weight_init).cuda(GPU)
     decoder_lv3 = models.Decoder().apply(weight_init).cuda(GPU)
 
-    encoder_lv1.load_state_dict(torch.load(f'{ROOT}/checkpoints/{METHOD}/encoder_lv1.pkl'))
-    encoder_lv2.load_state_dict(torch.load(f'{ROOT}/checkpoints/{METHOD}/encoder_lv2.pkl'))
-    encoder_lv3.load_state_dict(torch.load(f'{ROOT}/checkpoints/{METHOD}/encoder_lv3.pkl'))
+    encoder_lv1.load_state_dict(torch.load(f'{load}/encoder_lv1.pkl'))
+    encoder_lv2.load_state_dict(torch.load(f'{load}/encoder_lv2.pkl'))
+    encoder_lv3.load_state_dict(torch.load(f'{load}/encoder_lv3.pkl'))
 
-    decoder_lv1.load_state_dict(torch.load(f'{ROOT}/checkpoints/{METHOD}/decoder_lv1.pkl'))
-    decoder_lv2.load_state_dict(torch.load(f'{ROOT}/checkpoints/{METHOD}/decoder_lv2.pkl'))
-    decoder_lv3.load_state_dict(torch.load(f'{ROOT}/checkpoints/{METHOD}/decoder_lv3.pkl'))
+    decoder_lv1.load_state_dict(torch.load(f'{load}/decoder_lv1.pkl'))
+    decoder_lv2.load_state_dict(torch.load(f'{load}/decoder_lv2.pkl'))
+    decoder_lv3.load_state_dict(torch.load(f'{load}/decoder_lv3.pkl'))
 
     for input, output in zip(input, output):
         print(input, output)
